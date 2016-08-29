@@ -11,11 +11,15 @@ namespace Tickets.DAL.Models.Entities
 {
     public class User:IdentityUser
     {
+        public User()
+        {
+            Purchases = new HashSet<Purchase>();
+        }
+
         [MaxLength(50)]
         public string FirstName { get; set; }
         [MaxLength(50)]
         public string LastName { get; set; }
-        [MaxLength(50)]
         public virtual ICollection<Purchase> Purchases { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Tickets.Web.Models
 {
-    public class LoginModel
+    public class RegisterViewModel
     {
         [Required]
         [EmailAddress]
@@ -14,5 +14,13 @@ namespace Tickets.Web.Models
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+        [Required]
+        [DataType(DataType.Password)]
+        [Compare("Password")]
+        public string ConfirmPassword { get; set; }
+        [Required]
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Tickets.DAL.Models.Entities
 {
-    public class Role:IdentityRole
+    public class Role : IdentityRole
     {
     }
 }

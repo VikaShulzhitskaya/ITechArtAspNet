@@ -11,35 +11,35 @@ namespace Tickets.BLL.Core
 {
     public class TicketService:ITicketService
     {
-        private ITicketsUnitOfWork uow;
-        private IRepository<Ticket> repository;
+        private readonly ITicketsUnitOfWork _uow;
+        private readonly IRepository<Ticket> _repository;
 
         public TicketService(ITicketsUnitOfWork unitOfWork)
         {
-            uow = unitOfWork;
-            repository = uow.Tickets;
+            _uow = unitOfWork;
+            _repository = _uow.Tickets;
         }
-        public IEnumerable<Ticket> GetAll()
+        public IList<Ticket> GetAll()
         {
-            return repository.GetAll().ToList();
+            return _repository.GetAll().ToList();
         }
 
         public Ticket GetTicket(long id)
         {
-            return repository.GetById(id);
+            return _repository.GetById(id);
         }
 
-        public IEnumerable<Ticket> GetTicketsByEventId(int id)
+        public IList<Ticket> GetTicketsByEventId(int id)
         {
-            return repository.GetAll().Where(s => s.EventId == id).ToList();
+            return _repository.GetAll().Where(s => s.EventId == id).ToList();
         }
 
         public bool AddTicket(Ticket ticket)
         {
             try
             {
-                repository.Create(ticket);
-                uow.Complete();
+                _repository.Create(ticket);
+                _uow.Complete();
                 return true;
             }
             catch

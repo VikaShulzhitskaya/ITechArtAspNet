@@ -10,7 +10,7 @@ using Tickets.DAL.Models.Entities;
 
 namespace Tickets.DAL.Core
 {
-    public class UserStore:UserStore<User>
+    public class UserStore : UserStore<User>
     {
         public UserStore(DbContext context) : base(context)
         {

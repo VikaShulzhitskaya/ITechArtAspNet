@@ -13,7 +13,9 @@ namespace Tickets.DAL.Models.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
+        [MaxLength(50)]
         public string Name { get; set; }
+        [MaxLength(50)]
         public string Description { get; set; }
     }
 }

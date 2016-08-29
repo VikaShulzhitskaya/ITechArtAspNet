@@ -9,7 +9,7 @@ namespace Tickets.BLL.Common
 {
     public interface IEventService
     {
-        IEnumerable<Event> GetAll();
+        IList<Event> GetAll();
         Event GetEvent(long id);
         bool AddEvent(Event newEvent);
     }

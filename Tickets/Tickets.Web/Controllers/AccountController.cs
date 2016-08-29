@@ -16,15 +16,15 @@ namespace Tickets.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private UserManager userManager;
-        private RoleManager roleManager;
-        private IAuthenticationManager authenticationManager;
+        private readonly UserManager _userManager;
+        private readonly RoleManager _roleManager;
+        private readonly IAuthenticationManager _authenticationManager;
 
         public AccountController(UserManager userManager, RoleManager roleManager, IAuthenticationManager authManager)
         {
-            this.userManager = userManager;
-            this.roleManager = roleManager;
-            authenticationManager = authManager;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _authenticationManager = authManager;
         }
         //Get
         public ActionResult Login()
@@ -34,22 +34,22 @@ namespace Tickets.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginModel model)
+        public ActionResult Login(LoginViewModel model)
         {
             SetInitialData();
             if (ModelState.IsValid)
             {
-                User user = userManager.Find(model.Email, model.Password);
+                User user = _userManager.Find(model.Email, model.Password);
                 if (user == null)
                 {
                     ModelState.AddModelError("", "Неверный логин или пароль");
                 }
                 else
                 {
-                    ClaimsIdentity claims = userManager.CreateIdentity(user,
+                    ClaimsIdentity claims = _userManager.CreateIdentity(user,
                         DefaultAuthenticationTypes.ApplicationCookie);
-                    authenticationManager.SignOut();
-                    authenticationManager.SignIn(new AuthenticationProperties { IsPersistent = true }, claims);
+                    _authenticationManager.SignOut();
+                    _authenticationManager.SignIn(new AuthenticationProperties { IsPersistent = true }, claims);
                     return RedirectToAction("Index", "Home");
                 }
             }
@@ -58,7 +58,7 @@ namespace Tickets.Web.Controllers
         [Authorize]
         public ActionResult Logout()
         {
-            authenticationManager.SignOut();
+            _authenticationManager.SignOut();
             return RedirectToAction("Index", "Home");
         }
 
@@ -69,16 +69,16 @@ namespace Tickets.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(RegisterModel model)
+        public ActionResult Register(RegisterViewModel model)
         {
             SetInitialData();
             if (ModelState.IsValid)
             {
                 var user = new User {Email = model.Email, FirstName = model.FirstName, LastName = model.LastName,UserName = model.Email};
-                var result = userManager.Create(user, model.Password);
+                var result = _userManager.Create(user, model.Password);
                 if (result.Succeeded)
                 {
-                    userManager.AddToRole(user.Id, "user");
+                    _userManager.AddToRole(user.Id, "user");
                     return View("SuccessRegister");
                 }
                 ModelState.AddModelError("",result.Errors.FirstOrDefault());
@@ -88,21 +88,21 @@ namespace Tickets.Web.Controllers
         [Authorize]
         public ActionResult UserAccount()
         {
-            var user = userManager.FindById(User.Identity.GetUserId());
-            var userModel = new UserModel {Email = user.Email,FirstName = user.FirstName,LastName = user.LastName,UserId = user.Id};
+            var user = _userManager.FindById(User.Identity.GetUserId());
+            var userModel = new UserViewModel {Email = user.Email,FirstName = user.FirstName,LastName = user.LastName,UserId = user.Id};
             return View("UserArea", userModel);
         }
 
         private void SetInitialData()
         {
-            roleManager.Create(new Role { Name = "admin" });
-            roleManager.Create(new Role {Name = "user"});
+            _roleManager.Create(new Role { Name = "admin" });
+            _roleManager.Create(new Role {Name = "user"});
             var admin = new User {Email = "admin@gmail.com",FirstName = "Ivan",LastName = "Ivanov",UserName = "admin@gmail.com" };
-            var result = userManager.Create(admin, "1234567");
+            var result = _userManager.Create(admin, "1234567");
             if (result.Succeeded)
             {
-                userManager.AddToRole(admin.Id, "admin");
-                userManager.AddToRole(admin.Id, "user");
+                _userManager.AddToRole(admin.Id, "admin");
+                _userManager.AddToRole(admin.Id, "user");
             }
         }
     }

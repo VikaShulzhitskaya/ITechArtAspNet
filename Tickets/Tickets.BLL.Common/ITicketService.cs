@@ -9,9 +9,9 @@ namespace Tickets.BLL.Common
 {
     public interface ITicketService
     {
-        IEnumerable<Ticket> GetAll();
+        IList<Ticket> GetAll();
         Ticket GetTicket(long id);
-        IEnumerable<Ticket> GetTicketsByEventId(int id);
+        IList<Ticket> GetTicketsByEventId(int id);
         bool AddTicket(Ticket ticket);
     }
 }

@@ -10,7 +10,7 @@ using Tickets.DAL.Models.Entities;
 
 namespace Tickets.DAL.Core
 {
-    public class RoleStore:RoleStore<Role>,IRoleStore<Role>
+    public class RoleStore : RoleStore<Role>, IRoleStore<Role>
     {
         public RoleStore(DbContext context) : base(context)
         {

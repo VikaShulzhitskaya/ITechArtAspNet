@@ -11,29 +11,27 @@ using Tickets.DAL.Models.Enums;
 
 namespace Tickets.BLL.Core
 {
-    public class PurchaseService:IPurchaseService
+    public class PurchaseService : IPurchaseService
     {
-        private ITicketsUnitOfWork uow;
-        private IRepository<Ticket> ticketsRepository;
-        private IRepository<User> userRepository;
-        private IRepository<Purchase> purchaseRepository;
+        private readonly ITicketsUnitOfWork _uow;
+        private readonly IRepository<Ticket> _ticketsRepository;
+        private readonly IRepository<Purchase> _purchaseRepository;
 
         public PurchaseService(ITicketsUnitOfWork unitOfWork)
         {
-            uow = unitOfWork;
-            ticketsRepository = uow.Tickets;
-            userRepository = uow.Users;
-            purchaseRepository = uow.Purchases;
+            _uow = unitOfWork;
+            _ticketsRepository = _uow.Tickets;
+            _purchaseRepository = _uow.Purchases;
         }
-        public IEnumerable<Purchase> GetPurchasesByUserId(string id)
+        public IList<Purchase> GetPurchasesByUserId(string id)
         {
-            return purchaseRepository.GetAll().Include(p => p.User).Include(p => p.Ticket).Where(p => p.User.Id == id).ToList();
+            return _purchaseRepository.GetAll().Include(p => p.User).Include(p => p.Ticket).Where(p => p.User.Id == id).ToList();
         }
 
-        public IEnumerable<Purchase> GetUnconfirmedPurchasesByUserId(string id)
+        public IList<Purchase> GetUnconfirmedPurchasesByUserId(string id)
         {
             return
-                purchaseRepository.GetAll()
+                _purchaseRepository.GetAll()
                     .Include(p => p.User)
                     .Include(p => p.Ticket)
                     .Where(p => p.UserId == id)
@@ -42,22 +40,24 @@ namespace Tickets.BLL.Core
 
         public Purchase GetPurchase(long id)
         {
-            return purchaseRepository.GetById(id);
+            return _purchaseRepository.GetById(id);
         }
 
         public bool ConfirmPurchase(long id)
         {
-            var purchase = purchaseRepository.GetById(id);
-            var ticket = ticketsRepository.GetById(purchase.TicketId);
+            var purchase = _purchaseRepository.GetById(id);
+            var ticket = _ticketsRepository.GetById(purchase.TicketId);
             if (ticket.AvailableTicketsCount < purchase.NumberOfTickets)
+            {
                 return false;
+            }
             try
             {
                 ticket.AvailableTicketsCount -= purchase.NumberOfTickets;
                 purchase.Status = PurchaseStatus.Confirmed;
-                ticketsRepository.Update(ticket);
-                purchaseRepository.Update(purchase);
-                uow.Complete();
+                _ticketsRepository.Update(ticket);
+                _purchaseRepository.Update(purchase);
+                _uow.Complete();
                 return true;
             }
             catch
@@ -68,15 +68,15 @@ namespace Tickets.BLL.Core
 
         public bool CancelPurchase(long id)
         {
-            var purchase = purchaseRepository.GetById(id);
-            var ticket = ticketsRepository.GetById(purchase.TicketId);
+            var purchase = _purchaseRepository.GetById(id);
+            var ticket = _ticketsRepository.GetById(purchase.TicketId);
             ticket.AvailableTicketsCount += purchase.NumberOfTickets;
             purchase.Status = PurchaseStatus.Canceled;
             try
             {
-                ticketsRepository.Update(ticket);
-                purchaseRepository.Update(purchase);
-                uow.Complete();
+                _ticketsRepository.Update(ticket);
+                _purchaseRepository.Update(purchase);
+                _uow.Complete();
                 return true;
             }
             catch
@@ -87,14 +87,17 @@ namespace Tickets.BLL.Core
 
         public bool EditPurchase(Purchase newPurchase)
         {
-            var purchase = purchaseRepository.GetById(newPurchase.Id);
-            var ticket = ticketsRepository.GetById(purchase.TicketId);
-            if (ticket.AvailableTicketsCount < newPurchase.NumberOfTickets) return false;
+            var purchase = _purchaseRepository.GetById(newPurchase.Id);
+            var ticket = _ticketsRepository.GetById(purchase.TicketId);
+            if (ticket.AvailableTicketsCount < newPurchase.NumberOfTickets)
+            {
+                return false;
+            }
             purchase.NumberOfTickets = newPurchase.NumberOfTickets;
             try
             {
-                purchaseRepository.Update(purchase);
-                uow.Complete();
+                _purchaseRepository.Update(purchase);
+                _uow.Complete();
                 return true;
             }
             catch
@@ -108,8 +111,8 @@ namespace Tickets.BLL.Core
             try
             {
                 purchase.Status = PurchaseStatus.Unconfirmed;
-                purchaseRepository.Create(purchase);
-                uow.Complete();
+                _purchaseRepository.Create(purchase);
+                _uow.Complete();
                 return true;
             }
             catch

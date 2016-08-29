@@ -8,7 +8,7 @@ using Tickets.DAL.Models.Entities;
 
 namespace Tickets.BLL.Core.Identity
 {
-    public class UserManager:UserManager<User>
+    public class UserManager : UserManager<User>
     {
         public UserManager(IUserStore<User> store) : base(store)
         {

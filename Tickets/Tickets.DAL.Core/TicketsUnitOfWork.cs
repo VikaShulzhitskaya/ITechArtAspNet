@@ -10,9 +10,9 @@ using Tickets.DAL.Models.Entities;
 
 namespace Tickets.DAL.Core
 {
-    public class TicketsUnitOfWork:ITicketsUnitOfWork
+    public class TicketsUnitOfWork : ITicketsUnitOfWork
     {
-        private DbContext _dbContext;
+        private readonly DbContext _dbContext;
 
         public TicketsUnitOfWork(DbContext context)
         {

@@ -9,32 +9,32 @@ using Tickets.DAL.Models.Entities;
 
 namespace Tickets.BLL.Core
 {
-    public class EventService:IEventService
+    public class EventService : IEventService
     {
-        private ITicketsUnitOfWork uow;
-        private IRepository<Event> repository;
+        private readonly ITicketsUnitOfWork _uow;
+        private readonly IRepository<Event> _repository;
 
         public EventService(ITicketsUnitOfWork uow)
         {
-            this.uow = uow;
-            repository = this.uow.Events;
+            _uow = uow;
+            _repository = _uow.Events;
         }
-        public IEnumerable<Event> GetAll()
+        public IList<Event> GetAll()
         {
-            return repository.GetAll().ToList();
+            return _repository.GetAll().ToList();
         }
 
         public Event GetEvent(long id)
         {
-            return repository.GetById(id);
+            return _repository.GetById(id);
         }
 
         public bool AddEvent(Event newEvent)
         {
             try
             {
-                repository.Create(newEvent);
-                uow.Complete();
+                _repository.Create(newEvent);
+                _uow.Complete();
                 return true;
             }
             catch

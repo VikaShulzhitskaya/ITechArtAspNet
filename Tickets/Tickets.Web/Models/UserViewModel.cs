@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Tickets.Web.Models
 {
-    public class UserModel
+    public class UserViewModel
     {
         public string UserId { get; set; }
         public string Email { get; set; }

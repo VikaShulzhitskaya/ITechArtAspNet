@@ -9,8 +9,8 @@ namespace Tickets.BLL.Common
 {
     public interface IPurchaseService
     {
-        IEnumerable<Purchase> GetPurchasesByUserId(string id);
-        IEnumerable<Purchase> GetUnconfirmedPurchasesByUserId(string id);
+        IList<Purchase> GetPurchasesByUserId(string id);
+        IList<Purchase> GetUnconfirmedPurchasesByUserId(string id);
         Purchase GetPurchase(long id);
         bool ConfirmPurchase(long id);
         bool CancelPurchase(long id);

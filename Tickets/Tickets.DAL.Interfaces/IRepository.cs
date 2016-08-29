@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tickets.DAL.Interfaces
 {
-    public interface IRepository<T> where T:class
+    public interface IRepository<T> where T : class
     {
         IQueryable<T> GetAll();
         T GetById(long id);

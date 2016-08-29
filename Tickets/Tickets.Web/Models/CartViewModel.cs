@@ -7,7 +7,7 @@ using Tickets.DAL.Models.Enums;
 
 namespace Tickets.Web.Models
 {
-    public class CartModel
+    public class CartViewModel
     {
         public long PurchaseId { get; set; }
         public string EventName { get; set; }
@@ -15,5 +15,10 @@ namespace Tickets.Web.Models
         public float Price { get; set; }
         public int TicketCount { get; set; }
         public PurchaseStatus Status { get; set; }
+
+        public bool IsCompleted
+        {
+            get { return Status == PurchaseStatus.Confirmed; }
+        }
     }
 }
