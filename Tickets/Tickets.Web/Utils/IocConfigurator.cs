@@ -41,7 +41,7 @@ namespace Tickets.Web.Utils
             kernel.Bind<IRepository<Event>>().To<BaseRepository<Event>>().InSingletonScope();
             kernel.Bind<IRepository<Purchase>>().To<BaseRepository<Purchase>>().InSingletonScope();
             kernel.Bind<UserManager<User, string>>().To<UserManager>().InSingletonScope();
-            kernel.Bind<RoleManager>().ToSelf().InSingletonScope();
+            kernel.Bind<RoleManager<Role>>().To<RoleManager>().InSingletonScope();
             kernel.Bind<IUserStore<User>>().To<UserStore>().InSingletonScope();
             kernel.Bind<IRoleStore<Role>>().To<RoleStore>().InSingletonScope();
             kernel.Bind<IAuthenticationManager>()

@@ -20,9 +20,11 @@ namespace Tickets.Web.Controllers
         private RoleManager roleManager;
         private IAuthenticationManager authenticationManager;
 
-        public AccountController(UserManager userManager)
+        public AccountController(UserManager userManager, RoleManager roleManager, IAuthenticationManager authManager)
         {
             this.userManager = userManager;
+            this.roleManager = roleManager;
+            authenticationManager = authManager;
         }
         //Get
         public ActionResult Login()
@@ -72,7 +74,7 @@ namespace Tickets.Web.Controllers
             SetInitialData();
             if (ModelState.IsValid)
             {
-                var user = new User {Email = model.Email, FirstName = model.FirstName, LastName = model.LastName,UserName = model.FirstName};
+                var user = new User {Email = model.Email, FirstName = model.FirstName, LastName = model.LastName,UserName = model.Email};
                 var result = userManager.Create(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -95,7 +97,7 @@ namespace Tickets.Web.Controllers
         {
             roleManager.Create(new Role { Name = "admin" });
             roleManager.Create(new Role {Name = "user"});
-            var admin = new User {Email = "admin@gmail.com",FirstName = "Ivan",LastName = "Ivanov",UserName = "admin"};
+            var admin = new User {Email = "admin@gmail.com",FirstName = "Ivan",LastName = "Ivanov",UserName = "admin@gmail.com" };
             var result = userManager.Create(admin, "1234567");
             if (result.Succeeded)
             {
