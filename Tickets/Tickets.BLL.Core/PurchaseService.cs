@@ -25,7 +25,13 @@ namespace Tickets.BLL.Core
         }
         public IList<Purchase> GetPurchasesByUserId(string id)
         {
-            return _purchaseRepository.GetAll().Include(p => p.User).Include(p => p.Ticket).Where(p => p.User.Id == id).ToList();
+            return _purchaseRepository.GetAll()
+                .Include(p => p.User)
+                .Include(p => p.Ticket)
+                .Where(p => p.User.Id == id)
+                .Where(p=>p.Status == PurchaseStatus.Confirmed || 
+                          p.Status == PurchaseStatus.Unconfirmed)
+                .ToList();
         }
 
         public IList<Purchase> GetUnconfirmedPurchasesByUserId(string id)
@@ -70,7 +76,10 @@ namespace Tickets.BLL.Core
         {
             var purchase = _purchaseRepository.GetById(id);
             var ticket = _ticketsRepository.GetById(purchase.TicketId);
-            ticket.AvailableTicketsCount += purchase.NumberOfTickets;
+            if (purchase.Status == PurchaseStatus.Confirmed)
+            {
+                ticket.AvailableTicketsCount += purchase.NumberOfTickets;
+            }
             purchase.Status = PurchaseStatus.Canceled;
             try
             {

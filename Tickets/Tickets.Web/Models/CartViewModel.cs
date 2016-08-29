@@ -14,6 +14,7 @@ namespace Tickets.Web.Models
         public DateTime TicketDate { get; set; }
         public float Price { get; set; }
         public int TicketCount { get; set; }
+        public int AvailableTicketCount { get; set; }
         public PurchaseStatus Status { get; set; }
 
         public bool IsCompleted

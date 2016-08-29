@@ -3,29 +3,47 @@
     ViewBag.Title = "Корзина пользователя";
 }
 
-
-
 <div class="col-md-12">
     @foreach (var p in Model)
     {
         <div class="row">
             <div class="col-md-2">
-                <label></label>
+                <label>@p.EventName</label>
             </div>
             <div class="col-md-1">
-                dfsf
+                <label>Дата и время: @p.TicketDate</label>
             </div>
             <div class="col-md-1">
-
+                <label>Цена билета: @p.Price</label>
             </div>
-            <div class="col=md-3">
-
-            </div>
-            <div class="col-md-5">
-
-            </div>
+            @using (Html.BeginForm("ChangeStatus", "Cart", FormMethod.Post))
+            {
+                <div class="col=md-3">
+                    @Html.AntiForgeryToken()
+                    <label>Количество билетов: </label>
+                    @if (p.IsCompleted)
+                    {
+                        @Html.TextBox("ticketCount", p.TicketCount, htmlAttributes: new
+                   {
+                       @disabled = "disabled",
+                       @type = "number",
+                       @min = "1",
+                       @max = p.AvailableTicketCount
+                   })
+                    }
+                    else
+                    {
+                        @Html.TextBox("ticketCount",p.TicketCount)
+                    }
+                </div>
+                <div class="col-md-5">
+                    <button class="btn btn-primary" name="action" value="confirm">Подтвердить</button>
+                    <button class="btn btn-danger" name="action" value="cancel">Отменить</button>
+                </div>
+                @Html.Hidden("purchaseId", p.PurchaseId)
+            }
+            
             <hr/>
-
         </div>
     }
 </div>
