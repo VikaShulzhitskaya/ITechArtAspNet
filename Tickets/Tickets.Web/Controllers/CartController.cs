@@ -60,5 +60,13 @@ namespace Tickets.Web.Controllers
             }
             return View("Index");
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddPurchase(long ticketId, int ticketCount)
+        {
+            var userId = User.Identity.GetUserId();
+            _purchaseService.AddPurchase(ticketId,userId,ticketCount);
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

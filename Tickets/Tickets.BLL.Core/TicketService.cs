@@ -29,7 +29,7 @@ namespace Tickets.BLL.Core
             return _repository.GetById(id);
         }
 
-        public IList<Ticket> GetTicketsByEventId(int id)
+        public IList<Ticket> GetTicketsByEventId(long id)
         {
             return _repository.GetAll().Where(s => s.EventId == id).ToList();
         }

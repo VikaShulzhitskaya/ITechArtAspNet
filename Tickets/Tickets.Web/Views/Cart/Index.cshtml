@@ -2,6 +2,10 @@
 @{
     ViewBag.Title = "Корзина пользователя";
 }
+@section Styles
+{
+    <link rel="stylesheet" href="~/Content/Custom/customStyle.css" />
+}
 
 <div class="col-md-12">
     @foreach (var p in Model)
@@ -18,7 +22,7 @@
             </div>
             @using (Html.BeginForm("ChangeStatus", "Cart", FormMethod.Post))
             {
-                <div class="col=md-3">
+                <div class="col-md-3">
                     @Html.AntiForgeryToken()
                     <label>Количество билетов: </label>
                     @if (p.IsCompleted)
@@ -33,7 +37,12 @@
                     }
                     else
                     {
-                        @Html.TextBox("ticketCount",p.TicketCount)
+                        @Html.TextBox("ticketCount",p.TicketCount, htmlAttributes: new
+                   {
+                       @type = "number",
+                       @min = "1",
+                       @max = p.AvailableTicketCount
+                   })
                     }
                 </div>
                 <div class="col-md-5">

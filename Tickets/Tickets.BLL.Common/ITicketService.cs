@@ -11,7 +11,7 @@ namespace Tickets.BLL.Common
     {
         IList<Ticket> GetAll();
         Ticket GetTicket(long id);
-        IList<Ticket> GetTicketsByEventId(int id);
+        IList<Ticket> GetTicketsByEventId(long id);
         bool AddTicket(Ticket ticket);
     }
 }

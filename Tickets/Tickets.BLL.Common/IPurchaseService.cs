@@ -16,5 +16,6 @@ namespace Tickets.BLL.Common
         bool CancelPurchase(long id);
         bool EditPurchase(Purchase purchase);
         bool AddPurchase(Purchase purchase);
+        bool AddPurchase(long ticketId, string userId, int count);
     }
 }

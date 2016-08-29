@@ -129,5 +129,26 @@ namespace Tickets.BLL.Core
                 return false;
             }
         }
+
+        public bool AddPurchase(long ticketId, string userId, int count)
+        {
+            try
+            {
+                var purchase = new Purchase
+                {
+                    TicketId = ticketId,
+                    UserId = userId,
+                    NumberOfTickets = count,
+                    Status = PurchaseStatus.Unconfirmed
+                };
+                _purchaseRepository.Create(purchase);
+                _uow.Complete();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
