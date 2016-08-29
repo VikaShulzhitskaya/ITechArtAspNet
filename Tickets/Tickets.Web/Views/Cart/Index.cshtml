@@ -1,0 +1,27 @@
+﻿@using Tickets.DAL.Models.Enums
+@model IEnumerable<Tickets.Web.Models.CartModel>
+@{
+    ViewBag.Title = "Корзина пользователя";
+}
+
+
+
+<div class="col-md-12">
+    @foreach (var p in Model)
+    {
+        <div class="container">
+            <div class="col-md-2">@p.EventName</div>
+            <div class="col-md-1">Дата и время : @p.TicketDate</div>
+            <div class="col-md-1">Цена: @p.Price BYR</div>
+
+            <div class="col-md-1">
+                
+                Количество билетов: @p.TicketCount
+            </div>
+            @if (p.Status == PurchaseStatus.Unconfirmed)
+            {
+                
+            }
+        </div>
+    }
+</div>
