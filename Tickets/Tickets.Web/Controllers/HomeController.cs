@@ -13,19 +13,24 @@ namespace Tickets.Web.Controllers
     {
         private readonly IEventService _eventService;
         private readonly ITicketService _ticketService;
-        private readonly IPurchaseService _purchaseService;
 
-        public HomeController(IEventService eventService, ITicketService ticketService, IPurchaseService purchaseService)
+        public HomeController(IEventService eventService, ITicketService ticketService)
         {
-            _purchaseService = purchaseService;
             _eventService = eventService;
             _ticketService = ticketService;
         }
         // GET: Home
-        public ActionResult Index()
+        public ActionResult Index(int page = 1, int pageSize = 20)
         {
             var eventsView = new List<EventViewModel>();
-            var events = _eventService.GetAll();
+            var totalEvents = _eventService.GetAll();
+            var events = _eventService.GetAll().Skip((page - 1)*pageSize).Take(pageSize);
+            PageInfo pageInfo = new PageInfo
+            {
+                PageNumber = page,
+                PageSize = pageSize,
+                TotalItems = totalEvents.Count()
+            };
             foreach (var _event in events)
             {
                 var tickets = _ticketService.GetTicketsByEventId(_event.Id);
@@ -47,7 +52,13 @@ namespace Tickets.Web.Controllers
                     TicketViewModels = ticketsView
                 });
             }
-            return View(eventsView);
+            IndexEventViewModel indexEvent = new IndexEventViewModel
+            {
+                PageInfo = pageInfo,
+                EventViewModels = eventsView
+            };
+            return View(indexEvent);
+            //return View(eventsView);
         }
 
         [HttpGet]

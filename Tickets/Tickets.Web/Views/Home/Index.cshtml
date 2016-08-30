@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Tickets.Web.Models.EventViewModel>
+﻿@model Tickets.Web.Models.IndexEventViewModel
+@using Tickets.Web.Helpers
 @{
     ViewBag.Title = "Index";
 }
@@ -10,12 +11,23 @@
 
 <h2>Кинопоказы</h2>
 
+<div class="form-group">
+    Показывать по: 
+    <a href="@Url.Action("Index", new {pageSize = 3})">3</a>
+    <a href="@Url.Action("Index", new {pageSize = 5})">5</a>
+    <a href="@Url.Action("Index", new {pageSize = 10})">10</a>
+</div>
+<br />
+
 <div class="col-md-12">
-    @foreach (var e in Model)
+    @foreach (var e in Model.EventViewModels)
     {
         <div class="row ">
-            <div class="col-md-2"><label>@e.EventName</label></div>
-            <div class="col-md-4"><p>@e.Description</p></div>
+            <div class="col-md-2"><label>@e.EventName</label>
+            </div>
+            <div class="col-md-4">
+                <p>@e.Description</p>
+            </div>
             <div class="col-md-6">
                 @if (e.TicketViewModels.Count > 0)
                 {
@@ -34,21 +46,21 @@
                             using (Html.BeginForm("AddPurchase", "Cart", FormMethod.Post))
                             {
                                 @Html.AntiForgeryToken()
-                                 <tr>
-                                     <td>@t.Date</td>
-                                     <td>@t.Price BYR</td>
-                                     <td>
-                                         @Html.TextBox("ticketCount", 1, htmlAttributes: new
-                                         {
-                                             @type = "number",
-                                             @min = "1",
-                                             @max = t.AvailableCount
-                                         })
-                                     </td>
-                                     <td><button class="btn btn-default">Добавить в корзину</button></td>
-                                     @Html.Hidden("ticketId", t.TicketId)
-                                 </tr>
-                             }
+                                <tr>
+                                    <td>@t.Date</td>
+                                    <td>@t.Price BYR</td>
+                                    <td>
+                                        @Html.TextBox("ticketCount", 1, htmlAttributes: new
+                                        {
+                                            @type = "number",
+                                            @min = "1",
+                                            @max = t.AvailableCount
+                                        })
+                                    </td>
+                                    <td><button class="btn btn-default">Добавить в корзину</button></td>
+                                    @Html.Hidden("ticketId", t.TicketId)
+                                </tr>
+                            }
                         }
                         </tbody>
                     </table>
@@ -63,3 +75,6 @@
     }
 </div>
 
+<div class="btn-group">
+    @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x, pageSize = Model.PageInfo.PageSize }))
+</div>
