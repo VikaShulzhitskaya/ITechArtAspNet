@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Tickets.BLL.Common;
+using Tickets.DAL.Models.Entities;
 using Tickets.Web.Models;
 
 namespace Tickets.Web.Controllers
@@ -49,10 +50,32 @@ namespace Tickets.Web.Controllers
             return View(eventsView);
         }
 
+        [HttpGet]
         [Authorize(Roles = "admin")]
         public ActionResult AddTicket()
         {
             return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddTicket(AddTicketViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var _event = new Event {Name = model.EventName, Description = model.EventDescription};
+                _eventService.AddEvent(_event);
+                _ticketService.AddTicket(new Ticket
+                {
+                    EventId = _event.Id,
+                    Date = model.Date,
+                    AvailableTicketsCount = model.AvailableCount,
+                    Price = model.Price
+                });
+                return RedirectToAction("Index", "Home");
+            }
+            return View(model);
         }
     }
 }

@@ -1,7 +1,58 @@
-﻿
+﻿@model Tickets.Web.Models.AddTicketViewModel
 @{
     ViewBag.Title = "Создать событие";
 }
 
-<h2>AddTicket</h2>
+
+<h2>Добавить событие</h2>
+<hr/>
+<p>Заполните поля и нажмите кнопку добавить.</p>
+
+@using (Html.BeginForm("AddTicket", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
+        <div class="form-group">
+            @Html.LabelFor(m => m.EventName, "Название фильма", new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.EventName, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(m => m.EventName, "", new {@class = "text-danger"})
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.EventDescription, "Описание", new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.EventDescription, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(m => m.EventDescription, "", new {@class = "text-danger"})
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Date, "Дата", new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.Date, new {htmlAttributes = new {@class = "form-control", @placeholder = "MM.dd.yyyy hh.mm" } })
+                @Html.ValidationMessageFor(m => m.Date, "", new {@class = "text-danger"})
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Price, "Цена", new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.Price, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(m => m.Price, "", new {@class = "text-danger"})
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.AvailableCount, "Количество билетов", new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(m => m.AvailableCount, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(m => m.AvailableCount, "", new {@class = "text-danger"})
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Добавить" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
 

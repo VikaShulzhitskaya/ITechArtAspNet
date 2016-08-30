@@ -58,10 +58,11 @@ namespace Tickets.Web.Controllers
             {
                 _purchaseService.CancelPurchase(purchaseId);
             }
-            return View("Index");
+            return RedirectToAction("Index", "Cart");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult AddPurchase(long ticketId, int ticketCount)
         {
             var userId = User.Identity.GetUserId();

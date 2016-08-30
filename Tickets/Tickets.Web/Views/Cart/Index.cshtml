@@ -46,7 +46,10 @@
                     }
                 </div>
                 <div class="col-md-5">
-                    <button class="btn btn-primary" name="action" value="confirm">Подтвердить</button>
+                    @if (!p.IsCompleted)
+                    {
+                        <button class="btn btn-primary" name="action" value="confirm">Подтвердить</button>
+                    }
                     <button class="btn btn-danger" name="action" value="cancel">Отменить</button>
                 </div>
                 @Html.Hidden("purchaseId", p.PurchaseId)
